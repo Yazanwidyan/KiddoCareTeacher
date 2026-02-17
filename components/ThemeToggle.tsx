@@ -12,9 +12,9 @@ export function ThemeToggle() {
   return (
     <TouchableOpacity className="h-11 w-11 items-center justify-center" onPress={toggleColorScheme}>
       {isDark ? (
-        <Icon as={Sun} size={24} strokeWidth={3} className="text-white" />
+        <Icon as={Sun} size={24} strokeWidth={2.5} className="text-black" />
       ) : (
-        <Icon as={Moon} size={24} strokeWidth={3} className="text-white" />
+        <Icon as={Moon} size={24} strokeWidth={2.5} className="text-black" />
       )}
     </TouchableOpacity>
   );

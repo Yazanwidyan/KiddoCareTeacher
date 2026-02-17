@@ -47,13 +47,14 @@ export default function HomeScreen() {
         className="m-2 min-w-[100px] flex-1 items-center">
         <View className="relative">
           <Image
-            source={{ uri: `https://i.pravatar.cc/150?img=${item.id}` }}
+            // source={{ uri: `https://i.pravatar.cc/150?img=${item.id}` }}
+            source={require('../../assets/images/avatar2.jpg')}
             className="h-20 w-20 rounded-full"
           />
 
           {isPresent && (
             <View className="absolute -bottom-1 -left-1 h-5 w-5 items-center justify-center rounded-full border-2 border-background bg-primary">
-              <Icon as={Check} size={15} strokeWidth={2} className="text-white" />
+              <Icon as={Check} size={15} strokeWidth={2.5} className="text-white" />
             </View>
           )}
         </View>
@@ -65,7 +66,7 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <RoomHeader />
+      <RoomHeader screen="students" />
 
       <FlatList
         data={sortedStudents} // ✅ use sorted array
@@ -74,7 +75,7 @@ export default function HomeScreen() {
         renderItem={renderItem}
         contentContainerStyle={{
           paddingHorizontal: ITEM_MARGIN,
-          paddingTop: 24,
+          paddingTop: 8,
           paddingBottom: 100,
         }}
         columnWrapperStyle={{ justifyContent: 'flex-start' }}

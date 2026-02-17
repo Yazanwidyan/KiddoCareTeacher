@@ -24,7 +24,11 @@ const initialStudents: Student[] = [
   { id: 8, name: 'Rami Farah', status: 'checked_in' },
   { id: 9, name: 'Hala Zayed', status: 'pending' },
   { id: 10, name: 'Salma Farouk', status: 'pending' },
-  { id: 11, name: 'Yara Saeed', status: 'pending' },
+  { id: 11, name: 'Ahmad Samir', status: 'checked_in' },
+  { id: 12, name: 'Adam Hussein', status: 'pending' },
+  { id: 13, name: 'Zain Abed', status: 'pending' },
+  { id: 14, name: 'Adam Hussein', status: 'pending' },
+  { id: 15, name: 'Yara Saeed', status: 'pending' },
 ];
 
 const MIN_ITEM_WIDTH = 100;
@@ -178,7 +182,7 @@ export default function AttendanceScreen() {
 
   return (
     <View className="flex-1 bg-background">
-      <RoomHeader />
+      <RoomHeader screen="attendance" />
 
       {/* Header */}
       <View className="p-5">
@@ -196,7 +200,7 @@ export default function AttendanceScreen() {
         renderItem={renderItem}
         contentContainerStyle={{
           paddingHorizontal: ITEM_MARGIN,
-          paddingBottom: 180,
+          paddingBottom: 100,
         }}
         columnWrapperStyle={{ justifyContent: 'flex-start' }}
       />

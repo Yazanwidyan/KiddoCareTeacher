@@ -47,7 +47,7 @@ export default function MessagesScreen() {
                 <TouchableOpacity
                   onPress={() => router.push('/new-chat-screen')}
                   className="h-10 w-10 items-center justify-center rounded-full bg-primary">
-                  <Icon as={Plus} size={18} strokeWidth={2} className="text-white" />
+                  <Icon as={Plus} size={18} strokeWidth={2.5} className="text-white" />
                 </TouchableOpacity>
               </BlurView>
             </View>

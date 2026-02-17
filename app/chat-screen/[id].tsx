@@ -232,11 +232,11 @@ export default function ChatScreen() {
       {/* Input Bar */}
       <View className="flex-row items-center gap-2 border-t border-border bg-card p-3">
         <TouchableOpacity onPress={pickDocument}>
-          <Icon as={Paperclip} size={18} strokeWidth={2} className="text-foreground" />
+          <Icon as={Paperclip} size={18} strokeWidth={2.5} className="text-foreground" />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={pickImage}>
-          <Icon as={ImageIcon} size={18} strokeWidth={2} className="text-foreground" />
+          <Icon as={ImageIcon} size={18} strokeWidth={2.5} className="text-foreground" />
         </TouchableOpacity>
 
         <TextInput
@@ -252,7 +252,7 @@ export default function ChatScreen() {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={startRecording}>
-            <Icon as={Mic} size={18} strokeWidth={2} className="text-foreground" />
+            <Icon as={Mic} size={18} strokeWidth={2.5} className="text-foreground" />
           </TouchableOpacity>
         )}
 

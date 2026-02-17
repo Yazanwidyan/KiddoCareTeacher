@@ -1,6 +1,5 @@
 import ActivityModal from '@/components/activity';
 import { Icon } from '@/components/ui/icon';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text } from '@/components/ui/text';
 import {
   BottomSheetBackdrop,
@@ -8,12 +7,13 @@ import {
   BottomSheetModalProvider,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
-import { BlurView } from 'expo-blur';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   ChevronLeft,
+  ClipboardClockIcon,
   Coffee,
   Droplet,
+  InfoIcon,
   MessageCircle,
   Moon,
   Phone,
@@ -74,10 +74,7 @@ export default function StudentProfileScreen() {
   return (
     <View className="flex-1 bg-background">
       {/* Header */}
-      <SafeAreaView
-        edges={['top']}
-        className="rounded-b-[50px] bg-primary px-5 pb-3"
-        style={{ overflow: 'hidden' }}>
+      <SafeAreaView edges={['top']} className="bg-primary px-5 py-3" style={{ overflow: 'hidden' }}>
         <Image
           source={require('../../assets/images/bg.png')}
           resizeMode="cover"
@@ -93,86 +90,117 @@ export default function StudentProfileScreen() {
             zIndex: 0,
           }}
         />
-        <View className="h-28">
+        <View className="h-24">
           <View className="flex-row items-center justify-between">
-            <BlurView intensity={7} tint="light" className="overflow-hidden rounded-full">
+            <TouchableOpacity
+              onPress={() => router.back()}
+              className="h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20">
+              <Icon as={ChevronLeft} size={32} strokeWidth={2.5} className="mr-[3px] text-white" />
+            </TouchableOpacity>
+            <View className="flex-row items-center gap-2">
+              <View className="h-12 w-12 overflow-hidden rounded-full">
+                <Image
+                  source={{ uri: 'https://randomuser.me/api/portraits/women/44.jpg' }}
+                  className="h-12 w-12"
+                />
+              </View>
+              <Text className="text-xs font-bold text-white">{name || 'Bessie Cooper'}</Text>
+            </View>
+
+            <View className="flex-row gap-2 rounded-full border border-white/30 bg-white/20 px-3">
               <TouchableOpacity
                 onPress={() => router.back()}
-                className="h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-white/20">
-                <Icon as={ChevronLeft} size={32} strokeWidth={3} className="mr-[3px] text-white" />
+                className="h-11 w-11 items-center justify-center">
+                <Icon as={Phone} size={24} strokeWidth={2.5} className="text-white" />
               </TouchableOpacity>
-            </BlurView>
-            <BlurView intensity={7} tint="light" className="overflow-hidden rounded-full">
-              <View className="flex-row gap-2 rounded-full border border-white/30 bg-white/20 px-3">
-                <TouchableOpacity
-                  onPress={() => router.back()}
-                  className="h-11 w-11 items-center justify-center">
-                  <Icon as={Phone} size={24} strokeWidth={3} className="text-white" />
-                </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={() => router.back()}
-                  className="h-11 w-11 items-center justify-center">
-                  <Icon as={MessageCircle} size={24} strokeWidth={3} className="text-white" />
-                </TouchableOpacity>
-              </View>
-            </BlurView>
+              <TouchableOpacity
+                onPress={() => router.back()}
+                className="h-11 w-11 items-center justify-center">
+                <Icon as={MessageCircle} size={24} strokeWidth={2.5} className="text-white" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </SafeAreaView>
 
       {/* Profile Info */}
-      <View className="-mt-14 flex-1 px-5">
-        <View className="flex-row items-center">
-          <View className="h-32 w-32 overflow-hidden rounded-full border-4 border-white">
-            <Image
-              source={{ uri: 'https://randomuser.me/api/portraits/women/44.jpg' }}
-              className="h-32 w-32"
-            />
-          </View>
+      <View className="-mt-10 flex-1 rounded-t-[35px] bg-white px-5">
+        {/* <View className="flex-row items-center">
           <TouchableOpacity
             onPress={openSheet}
-            className="ml-auto mt-16 flex-row items-center gap-2 rounded-full border border-white/30 bg-amber-500 px-5 py-3">
-            <Icon as={PlusCircle} size={18} strokeWidth={2} className="text-white" />
+            className="flex-row items-center gap-2 rounded-full border border-white/30 bg-amber-500 px-5 py-3">
+            <Icon as={PlusCircle} size={18} strokeWidth={2.5} className="text-white" />
             <Text className="font-semibold text-white">Add Activity</Text>
           </TouchableOpacity>
-        </View>
-
-        <Text className="mt-4 text-2xl font-bold text-gray-800">{name || 'Bessie Cooper'}</Text>
+        </View> */}
 
         {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6 flex-1">
-          <TabsList className="bg-gray-200">
-            <TabsTrigger value="timeline">
-              <Text>Timeline</Text>
-            </TabsTrigger>
-            <TabsTrigger value="info">
-              <Text>Personal Information</Text>
-            </TabsTrigger>
-          </TabsList>
+        {/* Custom Tabs */}
+        <View className="mt-6 flex-1">
+          {/* Header Row */}
+          <View className="flex-row items-center justify-between">
+            <Text className="text-xl font-semibold">
+              {activeTab === 'timeline' ? 'Timeline' : 'Info'}
+            </Text>
 
-          <TabsContent value="timeline" className="flex-1">
+            <View className="flex-row rounded-full bg-gray-100 p-1">
+              {/* Timeline Tab */}
+              <TouchableOpacity
+                onPress={() => setActiveTab('timeline')}
+                className={`rounded-full px-4 py-2 ${
+                  activeTab === 'timeline' ? 'bg-primary' : ''
+                }`}>
+                <Icon
+                  as={ClipboardClockIcon}
+                  size={20}
+                  strokeWidth={2}
+                  className={activeTab === 'timeline' ? 'text-white' : 'text-black'}
+                />
+              </TouchableOpacity>
+
+              {/* Info Tab */}
+              <TouchableOpacity
+                onPress={() => setActiveTab('info')}
+                className={`rounded-full px-4 py-2 ${activeTab === 'info' ? 'bg-primary' : ''}`}>
+                <Icon
+                  as={InfoIcon}
+                  size={20}
+                  strokeWidth={2}
+                  className={activeTab === 'info' ? 'text-white' : 'text-black'}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* CONTENT */}
+          {activeTab === 'timeline' && (
             <FlatList
               showsVerticalScrollIndicator={false}
               data={timelineData}
               keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ paddingTop: 16, paddingHorizontal: 0 }}
+              contentContainerStyle={{ paddingTop: 16 }}
               renderItem={({ item }) => (
-                <View className="mb-4 rounded-2xl bg-white p-4">
+                <View className="mb-4 rounded-[30px] bg-gray-100 p-4">
                   <View className="mb-2 flex-row items-center justify-between">
                     <View className="flex-row items-center gap-2">
                       <View className="h-10 w-10 items-center justify-center rounded-full bg-gray-200">
                         {item.activity === 'Food' && (
-                          <Icon as={Coffee} size={20} strokeWidth={2} className="text-gray-500" />
+                          <Icon as={Coffee} size={20} strokeWidth={2.5} className="text-gray-500" />
                         )}
                         {item.activity === 'Milk' && (
-                          <Icon as={Droplet} size={20} strokeWidth={2} className="text-gray-500" />
+                          <Icon
+                            as={Droplet}
+                            size={20}
+                            strokeWidth={2.5}
+                            className="text-gray-500"
+                          />
                         )}
                         {item.activity === 'Nap' && (
-                          <Icon as={Moon} size={20} strokeWidth={2} className="text-gray-500" />
+                          <Icon as={Moon} size={20} strokeWidth={2.5} className="text-gray-500" />
                         )}
                         {item.activity === 'Potty' && (
-                          <Icon as={Toilet} size={20} strokeWidth={2} className="text-gray-500" />
+                          <Icon as={Toilet} size={20} strokeWidth={2.5} className="text-gray-500" />
                         )}
                       </View>
                       <Text className="font-semibold text-gray-800">{item.activity}</Text>
@@ -185,10 +213,10 @@ export default function StudentProfileScreen() {
                 </View>
               )}
             />
-          </TabsContent>
+          )}
 
-          <TabsContent value="info">
-            <ScrollView className="px-0 pt-4">
+          {activeTab === 'info' && (
+            <ScrollView className="pt-4">
               <Text className="mb-2 text-base text-gray-700">
                 <Text className="font-semibold">Name:</Text> {name || 'Bessie Cooper'}
               </Text>
@@ -208,8 +236,8 @@ export default function StudentProfileScreen() {
                 <Text className="font-semibold">Notes:</Text> Loves drawing and storytelling.
               </Text>
             </ScrollView>
-          </TabsContent>
-        </Tabs>
+          )}
+        </View>
       </View>
       <BottomSheetModalProvider>
         <BottomSheetModal
@@ -222,6 +250,15 @@ export default function StudentProfileScreen() {
             <ActivityModal />
           </BottomSheetScrollView>
         </BottomSheetModal>
+        {/* FAB - Only for Timeline */}
+        {activeTab === 'timeline' && (
+          <TouchableOpacity
+            onPress={openSheet}
+            activeOpacity={0.8}
+            className="absolute bottom-6 right-6 h-16 w-16 items-center justify-center rounded-full bg-orange-500 shadow-lg">
+            <Icon as={PlusCircle} size={28} strokeWidth={2.5} className="text-white" />
+          </TouchableOpacity>
+        )}
       </BottomSheetModalProvider>
     </View>
   );
