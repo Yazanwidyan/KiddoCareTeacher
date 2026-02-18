@@ -1,16 +1,9 @@
 import { RoomHeader } from '@/components/RoomHeader';
-import StudentActionsListModal from '@/components/StudentActionsListModal';
-import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import {
-  BottomSheetBackdrop,
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetScrollView,
-} from '@gorhom/bottom-sheet';
+import { useSheet } from '@/context/SheetContext';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { Check } from 'lucide-react-native';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React from 'react';
 import { Dimensions, FlatList, Image, TouchableOpacity, View } from 'react-native';
 
 const students = [
@@ -37,25 +30,8 @@ const ITEM_MARGIN = 8;
 const NUM_COLUMNS = Math.floor(SCREEN_WIDTH / (MIN_ITEM_WIDTH + ITEM_MARGIN * 2));
 
 export default function HomeScreen() {
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['85%'], []);
+  const { sheetType, closeSheet, openSheet } = useSheet();
 
-  const openSheet = () => {
-    bottomSheetModalRef.current?.present();
-  };
-
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        opacity={0.7}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        pressBehavior="close"
-      />
-    ),
-    []
-  );
   const router = useRouter();
   // 🔹 Sort students: Present first
   const sortedStudents = students.sort((a, b) => {
@@ -70,7 +46,7 @@ export default function HomeScreen() {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => openSheet()}
+        onPress={() => openSheet('studentActions')}
         // onPress={() => router.push(`/student-profile-screen/${item.id}?name=${item.name}`)}
         className="m-1 min-w-[100px] flex-1 items-center rounded-2xl bg-white p-2">
         <View className="relative">
@@ -110,18 +86,6 @@ export default function HomeScreen() {
         }}
         columnWrapperStyle={{ justifyContent: 'flex-start' }}
       />
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}>
-          <BottomSheetScrollView
-            contentContainerStyle={{ paddingBottom: 40, paddingTop: 8, paddingHorizontal: 24 }}
-            showsVerticalScrollIndicator={false}>
-            <StudentActionsListModal />
-          </BottomSheetScrollView>
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
     </View>
   );
 }

@@ -1,6 +1,8 @@
 import ActivitiesListModal from '@/components/ActivitiesListModal';
+import StudentActionsListModal from '@/components/StudentActionsListModal';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import { useSheet } from '@/context/SheetContext';
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
@@ -8,12 +10,7 @@ import {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import {
-  ClipboardCheckIcon,
-  HomeIcon,
-  MessageCircleIcon,
-  PlusCircleIcon,
-} from 'lucide-react-native';
+import { HomeIcon, MessageCircleIcon, PlusCircleIcon } from 'lucide-react-native';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
 
@@ -124,7 +121,7 @@ function CustomTabBar({
       {/* Floating Action Button */}
       <TouchableOpacity
         activeOpacity={0.85}
-        onPress={() => openSheet()}
+        onPress={() => openSheet('activities')}
         className="items-center justify-center rounded-2xl bg-black"
         style={{
           width: 62,
@@ -141,11 +138,8 @@ function CustomTabBar({
 
 export default function TabsLayout() {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const { sheetType, closeSheet, openSheet } = useSheet();
   const snapPoints = useMemo(() => ['85%'], []);
-
-  const openSheet = () => {
-    bottomSheetModalRef.current?.present();
-  };
 
   const renderBackdrop = useCallback(
     (props: any) => (
@@ -159,6 +153,15 @@ export default function TabsLayout() {
     ),
     []
   );
+
+  useEffect(() => {
+    if (sheetType !== 'none') {
+      bottomSheetModalRef.current?.present();
+    } else {
+      bottomSheetModalRef.current?.dismiss();
+    }
+  }, [sheetType]);
+
   return (
     <BottomSheetModalProvider>
       <>
@@ -166,30 +169,22 @@ export default function TabsLayout() {
           screenOptions={{ headerShown: false }}
           tabBar={(props) => <CustomTabBar {...props} openSheet={openSheet} />}>
           <Tab.Screen name="Students" component={StudentsScreen} />
-
           <Tab.Screen name="Messages" component={MessagesScreen} />
-          {/* 🔥 Intercept Activity Tab */}
-          <Tab.Screen
-            name="Activity"
-            component={View} // dummy
-            listeners={{
-              tabPress: (e) => {
-                e.preventDefault(); // stop navigation
-                openSheet(); // open bottom sheet
-              },
-            }}
-          />
         </Tab.Navigator>
 
-        {/* 🔥 Bottom Sheet */}
         <BottomSheetModal
           ref={bottomSheetModalRef}
           snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}>
+          backdropComponent={renderBackdrop}
+          onDismiss={closeSheet}>
           <BottomSheetScrollView
-            contentContainerStyle={{ paddingBottom: 40, paddingTop: 8, paddingHorizontal: 24 }}
-            showsVerticalScrollIndicator={false}>
-            <ActivitiesListModal />
+            contentContainerStyle={{
+              paddingBottom: 40,
+              paddingTop: 8,
+              paddingHorizontal: 24,
+            }}>
+            {sheetType === 'activities' && <ActivitiesListModal />}
+            {sheetType === 'studentActions' && <StudentActionsListModal />}
           </BottomSheetScrollView>
         </BottomSheetModal>
       </>

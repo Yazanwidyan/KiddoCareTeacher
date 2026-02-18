@@ -1,41 +1,37 @@
 import React, { createContext, useContext, useState } from 'react';
 
-// All rooms must be objects with label & value
-const rooms = [
-  { label: 'Bunnies Room', value: 'Bunnies Room' },
-  { label: 'Teddy Room', value: 'Teddy Room' },
-  { label: 'Sunshine Room', value: 'Sunshine Room' },
-];
+type SheetType = 'none' | 'studentActions' | 'activities';
 
-type RoomOption = { label: string; value: string };
-
-type RoomContextType = {
-  rooms: RoomOption[];
-  selectedRoom: RoomOption;
-  setSelectedRoom: (room: RoomOption) => void;
+type SheetContextType = {
+  sheetType: SheetType;
+  openSheet: (type: SheetType) => void;
+  closeSheet: () => void;
 };
 
-const RoomContext = createContext<RoomContextType | null>(null);
+const SheetContext = createContext<SheetContextType | null>(null);
 
-export function RoomProvider({ children }: { children: React.ReactNode }) {
-  const [selectedRoom, setSelectedRoom] = useState<RoomOption>(rooms[0]);
+export function SheetProvider({ children }: { children: React.ReactNode }) {
+  const [sheetType, setSheetType] = useState<SheetType>('none');
+
+  const openSheet = (type: SheetType) => {
+    setSheetType(type);
+  };
+
+  const closeSheet = () => {
+    setSheetType('none');
+  };
 
   return (
-    <RoomContext.Provider
-      value={{
-        rooms,
-        selectedRoom,
-        setSelectedRoom,
-      }}>
+    <SheetContext.Provider value={{ sheetType, openSheet, closeSheet }}>
       {children}
-    </RoomContext.Provider>
+    </SheetContext.Provider>
   );
 }
 
-export function useRoom() {
-  const context = useContext(RoomContext);
+export function useSheet() {
+  const context = useContext(SheetContext);
   if (!context) {
-    throw new Error('useRoom must be used inside RoomProvider');
+    throw new Error('useSheet must be used inside SheetProvider');
   }
   return context;
 }

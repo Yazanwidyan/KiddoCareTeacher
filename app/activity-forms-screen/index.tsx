@@ -5,6 +5,7 @@ import { Text } from '@/components/ui/text';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ActivityFormsScreen() {
   const { type, students } = useLocalSearchParams();
@@ -39,15 +40,17 @@ export default function ActivityFormsScreen() {
   };
 
   return (
-    <View className="flex-1 bg-background px-4 pt-6">
-      <ScrollView>
-        <Text className="mb-4 text-xl font-bold">{type?.toUpperCase()} Activity</Text>
+    <View className="flex-1 bg-background">
+      {/* Header */}
+      <SafeAreaView edges={['top']} className="px-5 pb-3" style={{ overflow: 'hidden' }} />
+      <ScrollView className="px-5">
+        <Text className="mb-4 text-xl font-bold capitalize">{type} Activity</Text>
 
         {/* Selected Students */}
         <Text className="mb-2 font-semibold">Students</Text>
         {selectedStudents.map((id: number) => (
           <Text key={id} className="mb-1 text-foreground">
-            Student ID: {id} {/* You can replace with name if you pass names too */}
+            Student ID: {id}
           </Text>
         ))}
 

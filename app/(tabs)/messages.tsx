@@ -37,7 +37,7 @@ export default function MessagesScreen() {
   return (
     <View className="flex-1 bg-background">
       {/* Header */}
-      <SafeAreaView edges={['top']} className="px-5 pb-3" style={{ overflow: 'hidden' }}>
+      <SafeAreaView edges={['top']} className="bg-white px-5 pb-5 pt-3">
         <View className="h-12">
           <View className="flex-row items-center justify-between">
             <Text className="text-xl font-bold">Messages</Text>

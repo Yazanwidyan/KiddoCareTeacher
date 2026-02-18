@@ -32,7 +32,7 @@ export default function StudentActionsListModal() {
         {actions.map((item) => (
           <TouchableOpacity
             key={item.id}
-            onPress={() => router.push(`/student-selection-screen?type=${item.type}`)}
+            onPress={() => router.push(`/activity-forms-screen?type=${item.type}`)}
             activeOpacity={0.85}
             className="flex-row items-center gap-4 rounded-2xl bg-white p-4 shadow-sm">
             <View className="h-12 w-12 items-center justify-center rounded-2xl bg-black/5">
