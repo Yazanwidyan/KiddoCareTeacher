@@ -1,14 +1,17 @@
 import FoodForm from '@/components/FoodForm';
 import PottyForm from '@/components/PottyForm';
 import SleepForm from '@/components/SleepForm';
+import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { X } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ActivityFormsScreen() {
   const { type, students } = useLocalSearchParams();
+  const router = useRouter();
   const selectedStudents = students ? JSON.parse(students as string) : [];
 
   const [notes, setNotes] = useState('');
@@ -44,15 +47,17 @@ export default function ActivityFormsScreen() {
       {/* Header */}
       <SafeAreaView edges={['top']} className="px-5 pb-3" style={{ overflow: 'hidden' }} />
       <ScrollView className="px-5">
-        <Text className="mb-4 text-xl font-bold capitalize">{type} Activity</Text>
+        <View className="relative flex-row items-center justify-center">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="absolute left-0 h-11 w-11 items-center justify-center rounded-full bg-white">
+            <Icon as={X} size={24} strokeWidth={2.5} className="text-black" />
+          </TouchableOpacity>
+
+          <Text className="font-poppins-bold my-4 text-xl capitalize">{type} Activity</Text>
+        </View>
 
         {/* Selected Students */}
-        <Text className="mb-2 font-semibold">Students</Text>
-        {selectedStudents.map((id: number) => (
-          <Text key={id} className="mb-1 text-foreground">
-            Student ID: {id}
-          </Text>
-        ))}
 
         {/* Activity Fields */}
         {renderActivityFields()}

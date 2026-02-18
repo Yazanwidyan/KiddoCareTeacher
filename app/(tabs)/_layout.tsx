@@ -175,6 +175,9 @@ export default function TabsLayout() {
         <BottomSheetModal
           ref={bottomSheetModalRef}
           snapPoints={snapPoints}
+          backgroundStyle={{
+            backgroundColor: '#f0efeb',
+          }}
           backdropComponent={renderBackdrop}
           onDismiss={closeSheet}>
           <BottomSheetScrollView

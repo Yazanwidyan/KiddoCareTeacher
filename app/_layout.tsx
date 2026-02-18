@@ -4,6 +4,12 @@ import { RoomProvider } from '@/context/RoomContext';
 import { SheetProvider } from '@/context/SheetContext';
 import { NAV_THEME } from '@/lib/theme';
 import { Nunito_400Regular, Nunito_600SemiBold, Nunito_700Bold } from '@expo-google-fonts/nunito';
+import {
+  Poppins_400Regular,
+  Poppins_500Medium,
+  Poppins_600SemiBold,
+  Poppins_700Bold,
+} from '@expo-google-fonts/poppins';
 import { ThemeProvider } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
 import { useFonts } from 'expo-font';
@@ -17,10 +23,14 @@ export { ErrorBoundary } from 'expo-router';
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
   const [fontsLoaded] = useFonts({
-    Nunito_400Regular,
-    Nunito_600SemiBold,
-    Nunito_700Bold,
+    Poppins_400Regular,
+    Poppins_500Medium,
+    Poppins_600SemiBold,
+    Poppins_700Bold,
   });
+  if (!fontsLoaded) {
+    return null;
+  }
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={NAV_THEME[colorScheme ?? 'light']}>
