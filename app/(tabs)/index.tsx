@@ -1,9 +1,16 @@
 import { RoomHeader } from '@/components/RoomHeader';
+import StudentActionsListModal from '@/components/StudentActionsListModal';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 import { useRouter } from 'expo-router';
 import { Check } from 'lucide-react-native';
-import React from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Dimensions, FlatList, Image, TouchableOpacity, View } from 'react-native';
 
 const students = [
@@ -30,6 +37,25 @@ const ITEM_MARGIN = 8;
 const NUM_COLUMNS = Math.floor(SCREEN_WIDTH / (MIN_ITEM_WIDTH + ITEM_MARGIN * 2));
 
 export default function HomeScreen() {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ['85%'], []);
+
+  const openSheet = () => {
+    bottomSheetModalRef.current?.present();
+  };
+
+  const renderBackdrop = useCallback(
+    (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        opacity={0.7}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        pressBehavior="close"
+      />
+    ),
+    []
+  );
   const router = useRouter();
   // 🔹 Sort students: Present first
   const sortedStudents = students.sort((a, b) => {
@@ -43,43 +69,59 @@ export default function HomeScreen() {
 
     return (
       <TouchableOpacity
-        onPress={() => router.push(`/student-profile-screen/${item.id}?name=${item.name}`)}
-        className="m-2 min-w-[100px] flex-1 items-center">
+        activeOpacity={0.7}
+        onPress={() => openSheet()}
+        // onPress={() => router.push(`/student-profile-screen/${item.id}?name=${item.name}`)}
+        className="m-1 min-w-[100px] flex-1 items-center rounded-2xl bg-white p-2">
         <View className="relative">
           <Image
             // source={{ uri: `https://i.pravatar.cc/150?img=${item.id}` }}
             source={require('../../assets/images/avatar2.jpg')}
             className="h-20 w-20 rounded-full"
           />
+          <Text className="mt-2 text-center text-xs font-semibold">{item.name}</Text>
 
-          {isPresent && (
-            <View className="absolute -bottom-1 -left-1 h-5 w-5 items-center justify-center rounded-full border-2 border-background bg-primary">
-              <Icon as={Check} size={15} strokeWidth={2.5} className="text-white" />
-            </View>
-          )}
+          <View className="mt-1 flex-row items-center justify-center gap-1">
+            <View className={`h-2 w-2 rounded-full ${isPresent ? 'bg-green-500' : 'bg-red-500'}`} />
+            <Text
+              className={`text-xs font-medium ${isPresent ? 'text-green-600' : 'text-red-600'}`}>
+              {item.status}
+            </Text>
+          </View>
         </View>
-
-        <Text className="mt-2 text-center text-xs font-semibold">{item.name}</Text>
       </TouchableOpacity>
     );
   };
 
   return (
     <View className="flex-1 bg-background">
-      <RoomHeader screen="students" />
+      <RoomHeader />
 
       <FlatList
         data={sortedStudents} // ✅ use sorted array
         keyExtractor={(item) => item.id.toString()}
         numColumns={NUM_COLUMNS}
+        showsVerticalScrollIndicator={false}
         renderItem={renderItem}
         contentContainerStyle={{
           paddingHorizontal: ITEM_MARGIN,
-          paddingTop: 8,
+          paddingTop: 12,
           paddingBottom: 100,
         }}
         columnWrapperStyle={{ justifyContent: 'flex-start' }}
       />
+      <BottomSheetModalProvider>
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          snapPoints={snapPoints}
+          backdropComponent={renderBackdrop}>
+          <BottomSheetScrollView
+            contentContainerStyle={{ paddingBottom: 40, paddingTop: 8, paddingHorizontal: 24 }}
+            showsVerticalScrollIndicator={false}>
+            <StudentActionsListModal />
+          </BottomSheetScrollView>
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
     </View>
   );
 }

@@ -18,7 +18,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ThemeToggle } from './ThemeToggle';
 import { Icon } from './ui/icon';
 
-export function RoomHeader({ screen }: any) {
+export function RoomHeader() {
   const { rooms, selectedRoom, setSelectedRoom } = useRoom();
   const ref = useRef<TriggerRef>(null);
   const insets = useSafeAreaInsets();
@@ -38,70 +38,65 @@ export function RoomHeader({ screen }: any) {
   }
 
   return (
-    <SafeAreaView
-      edges={['top']}
-      className="rounded-b-[35px] bg-white px-5 py-3"
-      style={{ overflow: 'hidden' }}>
-      {/* Content */}
+    <SafeAreaView edges={['top']} className="rounded-b-[35px] bg-white px-5 pb-5 pt-3">
       <View className="relative z-10">
-        {/* TOP ROW */}
+        {/* TOP BAR */}
         <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center gap-2 rounded-full bg-black/5">
+          <View className="h-11 w-11 items-center justify-center rounded-full bg-black/5">
             <ThemeToggle />
           </View>
-          <View>
-            <Text className="font-semibold text-black/90">KiddoCare</Text>
-          </View>
-          <View className="flex-row items-center gap-2 rounded-full bg-black/5">
-            <TouchableOpacity className="h-11 w-11 items-center justify-center">
-              <Icon as={Bell} size={24} strokeWidth={2.5} className="text-black" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* TOP ROW */}
-        <View className="mt-2 flex-row items-center justify-between">
-          <View>
-            <Text className="my-2 text-sm font-semibold capitalize text-black/90">
-              <View className="h-2 w-2 rounded-full bg-black" /> {screen}
-            </Text>
-            <Text className="text-3xl font-semibold text-black">Hello Emma!</Text>
-          </View>
+
+          <Text className="text-lg font-semibold text-black/90">KiddoCare</Text>
+
+          <TouchableOpacity className="h-11 w-11 items-center justify-center rounded-full bg-black/5">
+            <Icon as={Bell} size={22} strokeWidth={2.5} className="text-black" />
+          </TouchableOpacity>
         </View>
 
-        {/* ROOM SELECT CARD */}
-        <View className="mt-2">
-          <Text className="mb-1.5 text-sm text-black/70">Select room</Text>
+        {/* GREETING */}
+        <View className="mt-4">
+          <Text className="text-sm text-black/60">Good Morning</Text>
+          <Text className="text-2xl font-bold text-black">Hello Emma 👋</Text>
+        </View>
 
+        {/* ROOM SELECT (Primary Focus) */}
+        <View className="mt-4">
           <Select value={selectedRoom} onValueChange={(room: string) => setSelectedRoom(room)}>
             <SelectTrigger
               ref={ref}
               onMagicTap={onTouchStart}
-              className="h-12 w-full flex-row items-center justify-between rounded-full bg-black/5 px-6">
-              <View className="flex-row items-center gap-3">
-                <View>
-                  <SelectValue
-                    placeholder="Choose room"
-                    className="text-base font-medium text-black"
-                  />
-                </View>
-              </View>
+              className="h-14 w-full flex-row items-center justify-between rounded-2xl bg-black/5 px-5">
+              <SelectValue
+                placeholder="Choose classroom"
+                className="text-base font-semibold text-black"
+              />
             </SelectTrigger>
 
-            <SelectContent insets={contentInsets} className="mt-1 w-full px-2">
+            <SelectContent insets={contentInsets} className="mt-2 w-full px-2">
               <SelectGroup>
-                <SelectLabel>Rooms</SelectLabel>
+                <SelectLabel>Classrooms</SelectLabel>
                 {rooms.map((room) => (
                   <SelectItem
-                    className="py-3"
                     key={room.value}
                     value={room.value}
-                    label={room.label}>
+                    label={room.label}
+                    className="py-3">
                     {room.label}
                   </SelectItem>
                 ))}
               </SelectGroup>
             </SelectContent>
           </Select>
+        </View>
+        {/* ATTENDANCE SUMMARY */}
+        <View className="mt-3 flex-row items-center justify-between rounded-2xl bg-black/5 px-5 py-4">
+          <View>
+            <Text className="text-lg font-bold text-black">8 / 10 Present</Text>
+          </View>
+
+          <TouchableOpacity className="rounded-xl bg-black px-5 py-2">
+            <Text className="text-sm font-semibold text-white">Attendance</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

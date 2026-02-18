@@ -1,4 +1,4 @@
-import ActivityModal from '@/components/activity';
+import ActivitiesListModal from '@/components/ActivitiesListModal';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import {
@@ -17,7 +17,6 @@ import {
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Animated, TouchableOpacity, View } from 'react-native';
 
-import AttendanceScreen from './attendance';
 import StudentsScreen from './index';
 import MessagesScreen from './messages';
 
@@ -25,7 +24,6 @@ const Tab = createBottomTabNavigator();
 
 const iconMap: Record<string, any> = {
   Students: HomeIcon,
-  Attendance: ClipboardCheckIcon,
   Activity: PlusCircleIcon,
   Messages: MessageCircleIcon,
 };
@@ -52,8 +50,8 @@ function CustomTabBar({
   }, [state.index]);
 
   return (
-    <View className="absolute bottom-6 left-4 right-4 flex-row items-center gap-2">
-      <View className="flex-1 flex-row items-center justify-center gap-2 rounded-full bg-primary py-2 shadow-xl">
+    <View className="absolute bottom-6 left-11 right-11 flex-row items-center gap-2 shadow-2xl">
+      <View className="flex-1 flex-row items-center justify-center gap-2 rounded-2xl bg-black py-2">
         {state.routes
           .filter((route) => route.name !== 'Activity')
           .map((route, index) => {
@@ -93,28 +91,26 @@ function CustomTabBar({
             return (
               <TouchableOpacity key={route.key} onPress={onPress} activeOpacity={0.7}>
                 <Animated.View
+                  className={'rounded-xl p-2.5'}
                   style={{
                     width,
                     backgroundColor,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: 999,
-                    paddingVertical: 11,
-                    paddingHorizontal: 10,
                   }}>
                   <Animated.View
                     className="flex-row items-center gap-2"
                     style={{ transform: [{ scale }] }}>
                     <Icon
                       as={IconComponent}
-                      size={28}
+                      size={26}
                       strokeWidth={2.5}
-                      color={isFocused ? '#3FBDC8' : '#3FBDC8'}
+                      color={isFocused ? '#000' : '#000'}
                     />
                     {isFocused && (
                       <Text
                         style={{ width: dynamicWidth }}
-                        className="text-[11px] font-semibold text-primary">
+                        className="text-[11px] font-semibold text-black">
                         {label}
                       </Text>
                     )}
@@ -129,13 +125,15 @@ function CustomTabBar({
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={() => openSheet()}
-        className="items-center justify-center rounded-full bg-orange-500 shadow-xl"
+        className="items-center justify-center rounded-2xl bg-black"
         style={{
-          width: 65,
-          height: 65,
+          width: 62,
+          height: 62,
           elevation: 10,
         }}>
-        <Icon as={PlusCircleIcon} size={32} color="white" strokeWidth={2.5} />
+        <View className="rounded-xl bg-white p-2.5">
+          <Icon as={PlusCircleIcon} size={26} color="black" strokeWidth={2.5} />
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -168,7 +166,6 @@ export default function TabsLayout() {
           screenOptions={{ headerShown: false }}
           tabBar={(props) => <CustomTabBar {...props} openSheet={openSheet} />}>
           <Tab.Screen name="Students" component={StudentsScreen} />
-          <Tab.Screen name="Attendance" component={AttendanceScreen} />
 
           <Tab.Screen name="Messages" component={MessagesScreen} />
           {/* 🔥 Intercept Activity Tab */}
@@ -192,7 +189,7 @@ export default function TabsLayout() {
           <BottomSheetScrollView
             contentContainerStyle={{ paddingBottom: 40, paddingTop: 8, paddingHorizontal: 24 }}
             showsVerticalScrollIndicator={false}>
-            <ActivityModal />
+            <ActivitiesListModal />
           </BottomSheetScrollView>
         </BottomSheetModal>
       </>

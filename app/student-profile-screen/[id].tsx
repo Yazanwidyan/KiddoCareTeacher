@@ -1,12 +1,6 @@
-import ActivityModal from '@/components/activity';
+import ActivityModal from '@/components/ActivitiesListModal';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import {
-  BottomSheetBackdrop,
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetScrollView,
-} from '@gorhom/bottom-sheet';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import {
   ChevronLeft,
@@ -50,46 +44,11 @@ export default function StudentProfileScreen() {
   const { name } = useLocalSearchParams();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('timeline');
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const snapPoints = useMemo(() => ['85%'], []);
-
-  const openSheet = () => {
-    bottomSheetModalRef.current?.present();
-  };
-
-  const renderBackdrop = useCallback(
-    (props: any) => (
-      <BottomSheetBackdrop
-        {...props}
-        opacity={0.7}
-        appearsOnIndex={0}
-        disappearsOnIndex={-1}
-        pressBehavior="close"
-      />
-    ),
-    []
-  );
-  const handleMessage = () => alert(`Messaging ${name}...`);
 
   return (
     <View className="flex-1 bg-background">
       {/* Header */}
       <SafeAreaView edges={['top']} className="bg-primary px-5 py-3" style={{ overflow: 'hidden' }}>
-        <Image
-          source={require('../../assets/images/bg.png')}
-          resizeMode="cover"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            width: '150%',
-            height: '150%',
-            opacity: 0.12,
-            zIndex: 0,
-          }}
-        />
         <View className="h-24">
           <View className="flex-row items-center justify-between">
             <TouchableOpacity
@@ -126,17 +85,7 @@ export default function StudentProfileScreen() {
 
       {/* Profile Info */}
       <View className="-mt-10 flex-1 rounded-t-[35px] bg-white px-5">
-        {/* <View className="flex-row items-center">
-          <TouchableOpacity
-            onPress={openSheet}
-            className="flex-row items-center gap-2 rounded-full border border-white/30 bg-amber-500 px-5 py-3">
-            <Icon as={PlusCircle} size={18} strokeWidth={2.5} className="text-white" />
-            <Text className="font-semibold text-white">Add Activity</Text>
-          </TouchableOpacity>
-        </View> */}
-
         {/* Tabs */}
-        {/* Custom Tabs */}
         <View className="mt-6 flex-1">
           {/* Header Row */}
           <View className="flex-row items-center justify-between">
@@ -239,27 +188,6 @@ export default function StudentProfileScreen() {
           )}
         </View>
       </View>
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          snapPoints={snapPoints}
-          backdropComponent={renderBackdrop}>
-          <BottomSheetScrollView
-            contentContainerStyle={{ paddingBottom: 40, paddingTop: 8, paddingHorizontal: 24 }}
-            showsVerticalScrollIndicator={false}>
-            <ActivityModal />
-          </BottomSheetScrollView>
-        </BottomSheetModal>
-        {/* FAB - Only for Timeline */}
-        {activeTab === 'timeline' && (
-          <TouchableOpacity
-            onPress={openSheet}
-            activeOpacity={0.8}
-            className="absolute bottom-6 right-6 h-16 w-16 items-center justify-center rounded-full bg-orange-500 shadow-lg">
-            <Icon as={PlusCircle} size={28} strokeWidth={2.5} className="text-white" />
-          </TouchableOpacity>
-        )}
-      </BottomSheetModalProvider>
     </View>
   );
 }
