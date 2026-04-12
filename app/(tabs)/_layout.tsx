@@ -122,14 +122,14 @@ function CustomTabBar({
       <TouchableOpacity
         activeOpacity={0.85}
         onPress={() => openSheet('activities')}
-        className="items-center justify-center rounded-2xl bg-black"
+        className="items-center justify-center rounded-2xl bg-primary"
         style={{
           width: 62,
           height: 62,
           elevation: 10,
         }}>
-        <View className="rounded-xl bg-white p-2.5">
-          <Icon as={PlusCircleIcon} size={26} color="black" strokeWidth={2.5} />
+        <View className="rounded-xl bg-primary p-2.5">
+          <Icon as={PlusCircleIcon} size={26} color="white" strokeWidth={2.5} />
         </View>
       </TouchableOpacity>
     </View>
